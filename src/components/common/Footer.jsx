@@ -77,7 +77,7 @@ const Footer = () => {
             <h4 className="font-semibold mb-4">Contact</h4>
             <ul className="space-y-2 text-gray-400">
               <li>Email: info@ecocart.com</li>
-              <li>Phone: +1 (555) 123-4567</li>
+              <li>Phone: +91 (555) 123-4567</li>
               <li className="mt-4">
                 <div className="flex gap-4">
                   <a href="#" className="hover:text-eco-400 transition">

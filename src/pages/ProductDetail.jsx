@@ -12,7 +12,8 @@ const ProductDetail = () => {
   const dispatch = useDispatch()
   const [product, setProduct] = useState(null)
   const [quantity, setQuantity] = useState(1)
-  const [size, setSize] = useState('M') // Default size for clothing
+  const [size, setSize] = useState('M') // Default size for clothing/thickness
+  const [length, setLength] = useState('Standard') // Default length for yoga mat
   const wishlist = useSelector((state) => state.wishlist.items)
   const isInWishlist = wishlist.some((item) => item.id === parseInt(id))
 
@@ -128,6 +129,11 @@ const ProductDetail = () => {
             'Availability': foundProduct.inStock ? 'In Stock' : 'Out of Stock',
           },
         })
+        if (foundProduct.category === 'clothing') setSize('M')
+        else if (foundProduct.id === 4) {
+          setSize('6mm')
+          setLength('Standard (68")')
+        }
       }
     }, 300)
   }, [id])
@@ -136,8 +142,10 @@ const ProductDetail = () => {
     dispatch(addToCart({ 
       ...product, 
       quantity, 
-      // Only attach size if the product is clothing
-      ...(product.category === 'clothing' && { size })
+      // Attach selected option (size/thickness) if applicable
+      ...((product.category === 'clothing' || product.id === 4) && { size }),
+      // Attach length specifically for yoga mat
+      ...(product.id === 4 && { length })
     }))
     alert('Product added to cart!')
   }
@@ -216,24 +224,48 @@ const ProductDetail = () => {
             {/* Size, Quantity & Actions */}
             <div className="space-y-4">
               
-              {/* Size Selection (Only for clothing like T-Shirt) */}
-              {product.category === 'clothing' && (
+              {/* Size Selection (For Clothing and Yoga Mat) */}
+              {(product.category === 'clothing' || product.id === 4) && (
                 <div className="flex items-center gap-4 mb-2">
                   <label className="font-semibold text-gray-700 dark:text-gray-300 w-20">
-                    Size:
+                    {product.id === 4 ? 'Thickness:' : 'Size:'}
                   </label>
                   <div className="flex flex-wrap gap-2">
-                    {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map((s) => (
+                    {(product.id === 4 ? ['4mm', '6mm', '8mm'] : ['XS', 'S', 'M', 'L', 'XL', 'XXL']).map((s) => (
                       <button
                         key={s}
                         onClick={() => setSize(s)}
-                        className={`w-10 h-10 flex items-center justify-center rounded-lg border font-medium transition ${
+                        className={`px-3 py-2 flex items-center justify-center rounded-lg border font-medium transition ${
                           size === s
                             ? 'bg-eco-600 border-eco-600 text-white'
                             : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600'
                         }`}
                       >
                         {s}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Length Selection (Specifically for Yoga Mat) */}
+              {product.id === 4 && (
+                <div className="flex items-center gap-4 mb-2">
+                  <label className="font-semibold text-gray-700 dark:text-gray-300 w-20">
+                    Length:
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {['Standard (68")', 'Long (72")', 'Extra Long (84")'].map((l) => (
+                      <button
+                        key={l}
+                        onClick={() => setLength(l)}
+                        className={`px-3 py-2 flex items-center justify-center rounded-lg border font-medium transition ${
+                          length === l
+                            ? 'bg-eco-600 border-eco-600 text-white'
+                            : 'bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600'
+                        }`}
+                      >
+                        {l}
                       </button>
                     ))}
                   </div>

@@ -163,23 +163,7 @@ Update `API_BASE_URL` in `.env.local`:
 VITE_API_URL=https://your-api.com
 ```
 
-## 🚀 Deployment
 
-### Build for production
-```bash
-npm run build
-```
-
-### Deploy to Vercel
-```bash
-npm install -g vercel
-vercel
-```
-
-### Deploy to Netlify
-```bash
-netlify deploy --prod --dir=dist
-```
 
 ## 🧪 Testing Features
 
